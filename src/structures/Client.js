@@ -7,6 +7,7 @@ const {
   PresenceUpdateStatus
 } = require('discord.js')
 const GuildDB = require('../database/schemas/Guild.db')
+const { abbreviateNumber } = require('../helpers/helpers')
 // const Database = require('../database/mongoose')
 const BotUtils = require('./Utils')
 module.exports = class extends Client {
@@ -47,7 +48,7 @@ module.exports = class extends Client {
       presence: {
         activities: [
           {
-            name: process.env.STATUS,
+            name: `${abbreviateNumber(new GuildDB().getGuildAllData().length)} servers` ?? process.env.STATUS,
             type: ActivityType[process.env.STATUS_TYPE] ?? ActivityType.Playing
           }
         ],

@@ -8,6 +8,10 @@ module.exports = class {
     this.guildJson = 'guild'
   }
 
+  getGuildAllData () {
+    return this.guildDb.select(this.guildJson)
+  }
+
   getGuildData (guildID) {
     const [exist, [guildData]] = this.guildExist(guildID)
     const data = {
