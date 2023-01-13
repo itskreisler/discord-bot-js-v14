@@ -21,5 +21,13 @@
     "dotenv": "^16.0.3",
     "glob": "^8.0.3",
     "mongoose": "^6.7.1"
+  },
+  "devDependencies": {
+    "standard": "^17.0.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "standard"
+    ]
   }
 }
