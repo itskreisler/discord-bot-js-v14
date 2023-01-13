@@ -2,28 +2,33 @@
 const JsonDb = require('@kreisler/js-jsondb')
 const { isEmptyArray } = require('../../helpers/helpers.js')
 
-const guildDb = new JsonDb('src/json')
-const guildJson = 'guild'
-const guildExist = (id) => {
-  const q = guildDb.select(guildJson, ({ guildID }) => guildID === id)
-  if (isEmptyArray(q)) {
-    return [false, q]
+module.exports = class {
+  constructor () {
+    this.guildDb = new JsonDb('src/json')
+    this.guildJson = 'guild'
   }
-  return [true, q]
-}
-const getGuildData = (guildID) => {
-  const [exist, [guildData]] = guildExist(guildID)
-  const data = {
-    guildID,
-    prefix: process.env.PREFIX,
-    language: process.env.LANGUAGE
 
+  getGuildData (guildID) {
+    const [exist, [guildData]] = this.guildExist(guildID)
+    const data = {
+      guildID,
+      prefix: process.env.PREFIX,
+      language: process.env.LANGUAGE
+    }
+    if (!exist) {
+      this.guildDb.insert(this.guildJson, data)
+    }
+    return exist ? guildData : data
   }
-  if (!exist) {
-    guildDb.insert(guildJson, data)
+
+  guildExist (id) {
+    const q = this.guildDb.select(
+      this.guildJson,
+      ({ guildID }) => guildID === id
+    )
+    if (isEmptyArray(q)) {
+      return [false, q]
+    }
+    return [true, q]
   }
-  return exist ? guildData : data
-}
-module.exports = {
-  getGuildData
 }

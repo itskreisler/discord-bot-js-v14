@@ -6,6 +6,7 @@ const {
   ActivityType,
   PresenceUpdateStatus
 } = require('discord.js')
+const GuildDB = require('../database/schemas/Guild.db')
 // const Database = require('../database/mongoose')
 const BotUtils = require('./Utils')
 module.exports = class extends Client {
@@ -58,7 +59,7 @@ module.exports = class extends Client {
       ...options
     })
 
-    // this.db = new Database()
+    this.dbGuild = new GuildDB()
 
     this.commands = new Collection()
     this.slashCommands = new Collection()

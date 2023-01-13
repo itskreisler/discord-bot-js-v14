@@ -1,8 +1,6 @@
-const { getGuildData } = require('../../database/schemas/Guild.db')
-
 module.exports = async (client, message) => {
   if (!message.guild || !message.channel || message.author.bot) return
-  const GUILD_DATA = getGuildData(message.guild.id)
+  const GUILD_DATA = client.dbGuild.getGuildData(message.guild.id)
 
   if (!message.content.startsWith(GUILD_DATA.prefix)) return
 
