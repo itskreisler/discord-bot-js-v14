@@ -1,41 +1,59 @@
-const { Client, Collection, GatewayIntentBits, Partials, ActivityType, PresenceUpdateStatus } = require('discord.js')
+const {
+  Client,
+  Collection,
+  GatewayIntentBits,
+  Partials,
+  ActivityType,
+  PresenceUpdateStatus
+} = require('discord.js')
 // const Database = require('../database/mongoose')
 const BotUtils = require('./Utils')
 module.exports = class extends Client {
-  constructor (options = {
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.GuildBans,
-      GatewayIntentBits.GuildEmojisAndStickers,
-      GatewayIntentBits.GuildIntegrations,
-      GatewayIntentBits.GuildWebhooks,
-      GatewayIntentBits.GuildInvites,
-      GatewayIntentBits.GuildVoiceStates,
-      GatewayIntentBits.GuildPresences,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.GuildMessageReactions,
-      GatewayIntentBits.GuildMessageTyping,
-      GatewayIntentBits.DirectMessages,
-      GatewayIntentBits.DirectMessageReactions,
-      GatewayIntentBits.DirectMessageTyping,
-      GatewayIntentBits.MessageContent,
-      GatewayIntentBits.GuildScheduledEvents,
-      GatewayIntentBits.AutoModerationConfiguration,
-      GatewayIntentBits.AutoModerationExecution
-    ],
-    partials: [Partials.User, Partials.Channel, Partials.GuildMember, Partials.Message, Partials.Reaction],
-    allowedMentions: {
-      parse: ['roles', 'users'],
-      repliedUser: false
-    },
-
-    presence: {
-      activities: [{ name: process.env.STATUS, type: ActivityType[process.env.STATUS_TYPE] ?? ActivityType.Playing }
+  constructor (
+    options = {
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildBans,
+        GatewayIntentBits.GuildEmojisAndStickers,
+        GatewayIntentBits.GuildIntegrations,
+        GatewayIntentBits.GuildWebhooks,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessageTyping,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageReactions,
+        GatewayIntentBits.DirectMessageTyping,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildScheduledEvents,
+        GatewayIntentBits.AutoModerationConfiguration,
+        GatewayIntentBits.AutoModerationExecution
       ],
-      status: PresenceUpdateStatus.Online
+      partials: [
+        Partials.User,
+        Partials.Channel,
+        Partials.GuildMember,
+        Partials.Message,
+        Partials.Reaction
+      ],
+      allowedMentions: {
+        parse: ['roles', 'users'],
+        repliedUser: false
+      },
+      presence: {
+        activities: [
+          {
+            name: process.env.STATUS,
+            type: ActivityType[process.env.STATUS_TYPE] ?? ActivityType.Playing
+          }
+        ],
+        status: PresenceUpdateStatus.Online
+      }
     }
-  }) {
+  ) {
     super({
       ...options
     })
@@ -71,7 +89,12 @@ module.exports = class extends Client {
       RUTA_ARCHIVOS.forEach((rutaArchivo) => {
         try {
           const COMANDO = require(rutaArchivo)
-          const NOMBRE_COMANDO = rutaArchivo.split('\\').pop().split('/').pop().split('.')[0]
+          const NOMBRE_COMANDO = rutaArchivo
+            .split('\\')
+            .pop()
+            .split('/')
+            .pop()
+            .split('.')[0]
           COMANDO.NAME = NOMBRE_COMANDO
 
           if (NOMBRE_COMANDO) this.commands.set(NOMBRE_COMANDO, COMANDO)
@@ -82,7 +105,9 @@ module.exports = class extends Client {
       })
     }
 
-    console.log(`(${process.env.PREFIX}) ${this.commands.size} Comandos cargados`.green)
+    console.log(
+      `(${process.env.PREFIX}) ${this.commands.size} Comandos cargados`.green
+    )
   }
 
   async loadSlashCommands () {
@@ -97,7 +122,12 @@ module.exports = class extends Client {
       RUTA_ARCHIVOS.forEach((rutaArchivo) => {
         try {
           const COMANDO = require(rutaArchivo)
-          const NOMBRE_COMANDO = rutaArchivo.split('\\').pop().split('/').pop().split('.')[0]
+          const NOMBRE_COMANDO = rutaArchivo
+            .split('\\')
+            .pop()
+            .split('/')
+            .pop()
+            .split('.')[0]
           COMANDO.CMD.name = NOMBRE_COMANDO
 
           if (NOMBRE_COMANDO) this.slashCommands.set(NOMBRE_COMANDO, COMANDO)
@@ -148,7 +178,12 @@ module.exports = class extends Client {
       RUTA_ARCHIVOS.forEach((rutaArchivo) => {
         try {
           const EVENTO = require(rutaArchivo)
-          const NOMBRE_EVENTO = rutaArchivo.split('\\').pop().split('/').pop().split('.')[0]
+          const NOMBRE_EVENTO = rutaArchivo
+            .split('\\')
+            .pop()
+            .split('/')
+            .pop()
+            .split('.')[0]
           this.on(NOMBRE_EVENTO, EVENTO.bind(null, this))
         } catch (e) {
           console.log(`ERROR AL CARGAR EL EVENTO ${rutaArchivo}`.bgRed)

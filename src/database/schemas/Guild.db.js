@@ -1,12 +1,29 @@
-import JsonDb from '@kreisler/js-jsondb'
-import { isEmptyArray } from '../helpers.js'
+// require('dotenv').config()
+const JsonDb = require('@kreisler/js-jsondb')
+const { isEmptyArray } = require('../../helpers/helpers.js')
 
-export const userDb = new JsonDb('src/json')
-export const userJson = 'user'
-export const userExist = (where) => {
-  const q = userDb.select(userJson, ({ id }) => id === where)
+const guildDb = new JsonDb('src/json')
+const guildJson = 'guild'
+const guildExist = (id) => {
+  const q = guildDb.select(guildJson, ({ guildID }) => guildID === id)
   if (isEmptyArray(q)) {
-    return [false, []]
+    return [false, q]
   }
   return [true, q]
+}
+const getGuildData = (guildID) => {
+  const [exist, [guildData]] = guildExist(guildID)
+  const data = {
+    guildID,
+    prefix: process.env.PREFIX,
+    language: process.env.LANGUAGE
+
+  }
+  if (!exist) {
+    guildDb.insert(guildJson, data)
+  }
+  return exist ? guildData : data
+}
+module.exports = {
+  getGuildData
 }

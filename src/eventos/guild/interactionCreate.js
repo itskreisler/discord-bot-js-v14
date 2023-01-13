@@ -1,12 +1,13 @@
+const { getGuildData } = require('../../database/schemas/Guild.db')
 module.exports = async (client, interaction) => {
   if (!interaction.guild || !interaction.channel) return
-  // const GUILD_DATA = await client.db.getGuildData(interaction.guild.id)
+  const GUILD_DATA = getGuildData(interaction.guild.id)
 
   const COMANDO = client.slashCommands.get(interaction?.commandName)
 
   if (COMANDO) {
     if (COMANDO.OWNER) {
-      if (!process.env.OWNER_IDS.split(' ').includes(interaction.author.id)) return interaction.reply({ content: `❌ **Solo los dueños de este bot pueden ejecutar este comando!**\n**Dueños del bot:** ${process.env.OWNER_IDS.split(' ').map(OWNER_ID => `<@${OWNER_ID}>`)}`, ephemeral: true })
+      if (!process.env.OWNER_IDS.split(' ').includes(interaction.user.id)) return interaction.reply({ content: `❌ **Solo los dueños de este bot pueden ejecutar este comando!**\n**Dueños del bot:** ${process.env.OWNER_IDS.split(' ').map(OWNER_ID => `<@${OWNER_ID}>`)}`, ephemeral: true })
     }
 
     if (COMANDO.BOT_PERMISSIONS) {
@@ -18,6 +19,6 @@ module.exports = async (client, interaction) => {
     }
 
     // ejecutar el comando
-    COMANDO.execute(client, interaction, '/' /*, GUILD_DATA */)
+    COMANDO.execute(client, interaction, '/', GUILD_DATA)
   }
 }
