@@ -48,7 +48,10 @@ module.exports = class extends Client {
       presence: {
         activities: [
           {
-            name: `${abbreviateNumber(new GuildDB().getGuildAllData().length)} servers` ?? process.env.STATUS,
+            name:
+              `${abbreviateNumber(
+                new GuildDB().getGuildAllData().length
+              )} servers` ?? process.env.STATUS,
             type: ActivityType[process.env.STATUS_TYPE] ?? ActivityType.Playing
           }
         ],

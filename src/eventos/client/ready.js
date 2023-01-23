@@ -1,11 +1,42 @@
+const { ActivityType, PresenceUpdateStatus } = require('discord.js')
+
 module.exports = async client => {
-  console.log(`Conectado como ${client.user.tag}`.green)
+  console.log(`Conectado como ${client.user.tag}`.rainbow)
+  setInterval(() => pickPresence(client), 60 * 1000)
   if (client?.application?.commands) {
     client.application.commands.set(client.slashArray)
     console.log(`(/) ${client.slashCommands.size} Comandos Publicados!`.green)
   }
 }
-
+async function pickPresence (client) {
+  const options = [
+    {
+      type: ActivityType.Watching,
+      text: 'over Fusion Empire',
+      status: PresenceUpdateStatus.Online
+    },
+    {
+      type: ActivityType.Playing,
+      text: 'with Discord.js',
+      status: PresenceUpdateStatus.DoNotDisturb
+    },
+    {
+      type: ActivityType.Listening,
+      text: 'for commands',
+      status: PresenceUpdateStatus.Idle
+    }
+  ]
+  const option = Math.floor(Math.random() * options.length)
+  await client.user.setPresence({
+    activities: [
+      {
+        name: options[option].text,
+        type: options[option].type
+      }
+    ],
+    status: options[option].status
+  })
+}
 /* const twitchAlert = () => {
   setInterval(async function () {
     const user = 'USERNAME'
